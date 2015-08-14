@@ -9,7 +9,7 @@ powershell_script 'install eventstore' do
   nssm install EventStore "#{node[:eventstore][:destination_path]}\\EventStore.ClusterNode.exe" --db ./db --log ./logs
   EOH
   action :run
-  not_if ::Win32::Service.exists?("EventStore")
+  not_if "::Win32::Service.exists?('EventStore')"
 end
 
 service 'EventStore' do

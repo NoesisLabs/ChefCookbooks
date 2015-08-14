@@ -6,5 +6,5 @@ powershell_script 'install sql backup master' do
   & $env:TEMP\\sqlbackupmaster.exe /quiet
   EOH
   action :run
-  not_if ::Win32::Service.exists?("SQL Backup Master")
+  not_if "::Win32::Service.exists?('SQL Backup Master')"
 end
