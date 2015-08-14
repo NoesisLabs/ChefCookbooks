@@ -1,7 +1,3 @@
-include_recipe "chocolatey"
-
-chocolatey "OctopusDeploy.Tentacle"
-
 batch "tentacle_configure" do
   code <<-EOH
   "%PROGRAMFILES%\\Octopus Deploy\\Tentacle\\tentacle.exe" create-instance --instance "#{node[:octopusdeploy][:tentacle_name]}" --config "C:\Octopus\Tentacle.config" --console
