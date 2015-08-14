@@ -8,3 +8,7 @@ powershell_script 'install eventstore' do
   EOH
   action :run
 end
+
+service 'EventStore' do
+  action [:start, :enable]
+end
