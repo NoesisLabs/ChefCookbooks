@@ -1,5 +1,6 @@
 batch "tentacle_configure" do
   code <<-EOH
+  choco install octopusdeploy.tentacle --acceptlicense --yes --force
   "%PROGRAMFILES%\\Octopus Deploy\\Tentacle\\tentacle.exe" create-instance --instance "#{node[:octopusdeploy][:tentacle_name]}" --config "C:\Octopus\Tentacle.config" --console
   "%PROGRAMFILES%\\Octopus Deploy\\Tentacle\\tentacle.exe" new-certificate --instance "#{node[:octopusdeploy][:tentacle_name]}" --if-blank --console
   "%PROGRAMFILES%\\Octopus Deploy\\Tentacle\\tentacle.exe" configure --instance "#{node[:octopusdeploy][:tentacle_name]}" --reset-trust --console
