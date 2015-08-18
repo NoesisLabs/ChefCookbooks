@@ -9,7 +9,7 @@ backup_path = "#{node[:mssql][:root_path]}\\Backups"
   end
 end
 
-registry_key "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Microsoft SQL Server\\#{node[:mssql][:instance_id]}\\MSSQLServer" do
+registry_key "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Microsoft SQL Server\\#{node[:mssql][:registry_instance_id]}\\MSSQLServer" do
   values [{:name => "DefaultData", :type => :string, :data => "#{data_path}"},
           {:name => "DefaultLog", :type => :string, :data => "#{log_path}"},
 		  {:name => "BackupDirectory", :type => :string, :data => "#{backup_path}"}
