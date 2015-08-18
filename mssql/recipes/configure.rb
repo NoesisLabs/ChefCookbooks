@@ -43,13 +43,9 @@ powershell_script "Configure MS SQL" do
     GO
   "
   Invoke-Sqlcmd -Query $script -ServerInstance "#{node[:mssql][:instance_name]}"
+  
+  restart-service "#{node[:mssql][:service_name]}" -force -passthru
 
   EOH
   action :run
 end
-
-windows_service "#{node[:mssql][:service_name]}" do
-  action :restart
-end
-
-
