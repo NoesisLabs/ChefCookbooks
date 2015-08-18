@@ -17,8 +17,8 @@ powershell_script "Configure SSRS" do
   $rsConfig.ReserveURL("ReportServerWebService", "#{node[:ssrs][:base_url]}", 1033)
   $rsConfig.ReserveURL("ReportManager", "#{node[:ssrs][:base_url]}", 1033)
 
-  $script = $rsConfig.GenerateDatabaseCreationScript("#{node[:ssrs][:database_name]}", 1033, $FALSE)
-  Invoke-Sqlcmd -Query $script -ServerInstance "localhost\\#{serverInstance}"
+  $generateDb = $rsConfig.GenerateDatabaseCreationScript("#{node[:ssrs][:database_name]}", 1033, $FALSE)
+  Invoke-Sqlcmd -Query $generateDb.Script -ServerInstance "localhost\\#{serverInstance}"
 
   EOH
   action :run
