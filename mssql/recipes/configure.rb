@@ -2,7 +2,7 @@ data_path = "#{node[:mssql][:root_path]}\\Data"
 log_path = "#{node[:mssql][:root_path]}\\Logs"
 backup_path = "#{node[:mssql][:root_path]}\\Backups"
 
-%w[ #{data_path} #{log_path} #{backup_path} ].each do |path|
+%w[ "#{data_path}" "#{log_path}" "#{backup_path}" ].each do |path|
   directory path do
     recursive true
 	action :create
