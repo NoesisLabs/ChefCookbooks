@@ -10,9 +10,9 @@ backup_path = "#{node[:mssql][:root_path]}\\Backups"
 end
 
 registry_key "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\#{node[:mssql][:service_name]}\\MSSQLServer" do
-  values [{:name => "DefaultData", :type => :multi_string, :data => ["#{data_path}"]},
-          {:name => "DefaultLog", :type => :multi_string, :data => ["#{log_path}"]},
-		  {:name => "BackupDirectory", :type => :multi_string, :data => ["#{backup_path}"]}
+  values [{:name => "DefaultData", :type => :string, :data => "#{data_path}"},
+          {:name => "DefaultLog", :type => :string, :data => "#{log_path}"},
+		  {:name => "BackupDirectory", :type => :string, :data => "#{backup_path}"}
          ]
   action :create
 end
