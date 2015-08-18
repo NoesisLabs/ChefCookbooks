@@ -48,7 +48,7 @@ powershell_script "Configure MS SQL" do
   action :run
 end
 
-service "#{node[:mssql][:service_name]}" do
+windows_service "#{node[:mssql][:service_name]}" do
   action :restart
 end
 

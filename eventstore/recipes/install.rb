@@ -12,6 +12,6 @@ powershell_script 'install eventstore' do
   not_if do ::Win32::Service.exists?('EventStore') end
 end
 
-service 'EventStore' do
+windows_service 'EventStore' do
   action [:start, :enable]
 end
