@@ -1,4 +1,4 @@
-name "ms_sql_add_features"
+name "ssrs"
 version "0.1.0"
 
 supports "windows"
