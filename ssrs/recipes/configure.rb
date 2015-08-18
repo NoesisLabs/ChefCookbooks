@@ -1,5 +1,3 @@
-require 'win32/service'
-
 service 'ReportServer' do
   action [:start, :enable]
 end

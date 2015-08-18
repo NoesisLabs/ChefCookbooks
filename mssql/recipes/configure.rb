@@ -1,5 +1,3 @@
-require 'win32/service'
-
 data_path = "#{node[:mssql][:root_path]}\\Data"
 log_path = "#{node[:mssql][:root_path]}\\Logs"
 backup_path = "#{node[:mssql][:root_path]}\\Backups"
@@ -50,7 +48,7 @@ powershell_script "Configure MS SQL" do
   action :run
 end
 
-service '#{node[:mssql][:service_name]}' do
+service "#{node[:mssql][:service_name]}" do
   action :restart
 end
 
