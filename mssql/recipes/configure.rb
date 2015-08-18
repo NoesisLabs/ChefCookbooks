@@ -2,7 +2,7 @@ require 'win32/service'
 
 %w[ #{node[:mssql][:root_path]}\\Data #{node[:mssql][:root_path]}\\Logs #{node[:mssql][:root_path]}\\Backups ].each do |path|
   directory path do
-    recursive: true
+    recursive true
 	action :create
   end
 end
