@@ -1,3 +1,5 @@
+service_name = "OctopusDeploy Tentacle: #{node[:octopusdeploy][:tentacle_name]}"
+
 batch "tentacle_configure" do
   code <<-EOH
   choco install octopusdeploy.tentacle --acceptlicense --yes --force
@@ -10,4 +12,9 @@ batch "tentacle_configure" do
   "%PROGRAMFILES%\\Octopus Deploy\\Tentacle\\tentacle.exe" service --instance "#{node[:octopusdeploy][:tentacle_name]}" --install --start --console
   EOH
   action :run
+  not_if do ::Win32::Service.exists?(service_name) end
+end
+
+windows_service service_name do
+  action [:start, :enable]
 end
