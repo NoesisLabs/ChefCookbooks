@@ -2,7 +2,8 @@ service_name = "OctopusDeploy Tentacle: #{node[:octopusdeploy][:tentacle_name]}"
 
 powershell_script 'Install Octopus Tentacle' do
   code <<-EOH
-  & [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine")\\choco.exe install octopusdeploy.tentacle --acceptlicense --yes --force
+  $choco = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\choco.exe"
+  & $choco install octopusdeploy.tentacle --acceptlicense --yes --force
   EOH
   action :run
   not_if do ::Win32::Service.exists?(service_name) end

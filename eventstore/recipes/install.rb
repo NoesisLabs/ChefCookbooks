@@ -5,7 +5,8 @@ powershell_script 'install eventstore' do
   Add-Type -assembly "system.io.compression.filesystem"
   wget "#{node[:eventstore][:url]}" -OutFile "$env:TEMP\\eventstore.zip"
   [io.compression.zipfile]::ExtractToDirectory("$env:TEMP\\eventstore.zip", "#{node[:eventstore][:destination_path]}")
-  & [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine")\\choco.exe install nssm --acceptlicense --yes --force
+  $choco = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\choco.exe"
+  & $choco install nssm --acceptlicense --yes --force
   nssm install EventStore "#{node[:eventstore][:destination_path]}\\EventStore.ClusterNode.exe" --db ./db --log ./logs
   EOH
   action :run
