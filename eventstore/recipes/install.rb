@@ -7,7 +7,7 @@ powershell_script 'install eventstore' do
   [io.compression.zipfile]::ExtractToDirectory("$env:TEMP\\eventstore.zip", "#{node[:eventstore][:destination_path]}")
   $choco = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\choco.exe"
   & $choco install nssm --acceptlicense --yes --force
-  $nssm = $choco + "\\bin\\nssm.exe"
+  $nssm = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\bin\\nssm.exe"
   & $nssm install EventStore "#{node[:eventstore][:destination_path]}\\EventStore.ClusterNode.exe" --db ./db --log ./logs
   EOH
   action :run
