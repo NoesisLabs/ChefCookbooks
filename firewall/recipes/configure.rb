@@ -1,23 +1,23 @@
-node[:firewall][:allow].each do |name, direction, protocol, port|
-  powershell_script "Configure Firewall Setting #{name}" do
+node[:firewall][:allow].each do |rule|
+  powershell_script "Configure Firewall Setting #{rule['name']}" do
     code <<-EOH
-    New-NetFirewallRule -DisplayName "#{name}" -Direction #{direction} -LocalPort #{port} -Protocol #{protocol} -Action Allow
+    New-NetFirewallRule -DisplayName "#{rule['name']}" -Direction #{rule['direction']} -LocalPort #{rule['port']} -Protocol #{rule['protocol']} -Profile Any -Action Allow
 	$smtp.#{key} = #{value}
 	$smtp.put()
     EOH
     action :run
-    not_if "netsh advfirewall firewall show rule name=\"#{name}\" > nul"
+    not_if "netsh advfirewall firewall show rule name=\"#{rule['name']}\" > nul"
   end
 end
 
-node[:firewall][:block].each do |name, direction, protocol, port|
-  powershell_script "Configure Firewall Setting #{name}" do
+node[:firewall][:block].each do |rule|
+  powershell_script "Configure Firewall Setting #{rule['name']}" do
     code <<-EOH
-    New-NetFirewallRule -DisplayName "#{name}" -Direction #{direction} -LocalPort #{port} -Protocol #{protocol} -Action Block
+    New-NetFirewallRule -DisplayName "#{rule['name']}" -Direction #{rule['direction']} -LocalPort #{rule['port']} -Protocol #{rule['protocol']} -Profile Any -Action Block
 	$smtp.#{key} = #{value}
 	$smtp.put()
     EOH
     action :run
-    not_if "netsh advfirewall firewall show rule name=\"#{name}\" > nul"
+    not_if "netsh advfirewall firewall show rule name=\"#{rule['name']}\" > nul"
   end
 end
