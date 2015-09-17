@@ -1,6 +1,6 @@
 powershell_script 'Install SMTP' do
   code <<-EOH
-  Add-WindowsFeature Smtp-Server, Web-Lgcy-Mgmt-Console
+  Add-WindowsFeature Smtp-Server, Web-Lgcy-Mgmt-Console, Web-Lgcy-Scripting
   EOH
   action :run
   not_if "(Get-WindowsFeature -Name Smtp-Server).Installed"
