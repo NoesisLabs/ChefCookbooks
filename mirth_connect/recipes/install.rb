@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: mirthconnect
-# Recipe:: default
+# Recipe:: install
 #
 # Copyright 2014, Diagnotes, Inc.
 #
@@ -53,10 +53,10 @@ end
 
 
 # Download and setup Mirth
-downloaded_archive = "#{node[:mirthconnect][:homedir]}/mirthconnect-#{default[:mirthconnect][:version]}-unix.tar.gz"
+downloaded_archive = "#{node[:mirthconnect][:homedir]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
   user node[:mirthconnect][:user]
-  source "http://downloads.mirthcorp.com/connect/#{default[:mirthconnect][:version]}/mirthconnect-#{default[:mirthconnect][:version]}-unix.tar.gz"
+  source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
   not_if { File.exists? downloaded_archive }
 end
 
