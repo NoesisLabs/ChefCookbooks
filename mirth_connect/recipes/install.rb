@@ -69,7 +69,7 @@ end
 
 # Setup the service
 file '/etc/init.d/mirthconnect.conf' do
-  content IO.read("#{node[:mirthconnect][:homedir]}/mcservice")
+  lazy { content IO.read("#{node[:mirthconnect][:homedir]}/mcservice") }
   mode 0644
   owner "root"
   group "root"
