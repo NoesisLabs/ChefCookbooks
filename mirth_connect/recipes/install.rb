@@ -30,7 +30,7 @@ execute "apt-get-update-periodic" do
   end
 end
 
-package "java-1.8.0"
+package "default-jdk"
 
 
 # Setup User/Group/Directory structure
