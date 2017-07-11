@@ -53,27 +53,20 @@ end
 
 
 # Download and setup Mirth
-downloaded_archive = "#{node[:mirthconnect][:homedir]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
+downloaded_archive = "Chef::Config['file_cache_path']/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
   user node[:mirthconnect][:user]
   source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
   not_if { File.exists? downloaded_archive }
 end
 
-execute "untar-mirth" do
-  user node[:mirthconnect][:user]
-  cwd node[:mirthconnect][:homedir]
-  command "tar xzf #{downloaded_archive}"
-  creates "#{node[:mirthconnect][:homedir]}"
-end
-
-# Setup the service
-file '/etc/init.d/mirthconnect.conf' do
-  lazy { content IO.read("#{node[:mirthconnect][:homedir]}/mcservice") }
-  mode 0644
-  owner "root"
-  group "root"
-  action :create
+bash "install-mirth" do
+  cwd Chef::Config['file_cache_path']
+  code <<-EOL
+  tar xzf #{downloaded_archive}
+  mv Mirth\ Connect/ #{node[:mirthconnect][:homedir]}
+  EOL
+  not_if { File.exists? downloaded_archive }
 end
 
 template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
@@ -92,7 +85,26 @@ template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
   })
 end
 
-service "mirthconnect" do
-  provider Chef::Provider::Service::Upstart
-  action :start
+systemd_unit 'mirthconnect.service' do
+  content <<-EOU.gsub(/^\s+/, '')
+  [Unit]
+  Description=MirthConnect
+  After=network.target
+
+  [Service]
+  Type=forking
+
+  User=node[:mirthconnect][:user]
+  Group=node[:mirthconnect][:group]
+  ExecStart=/opt/mirthconnect/mcservice start
+  ExecStop=/opt/mirthconnect/mcservice stop
+  ExecRestart=/opt/mirthconnect/mcservice restart
+
+  TimeoutSec=60
+
+  [Install]
+  WantedBy=multi-user.target
+  EOU
+
+  action [:create, :enable]
 end
