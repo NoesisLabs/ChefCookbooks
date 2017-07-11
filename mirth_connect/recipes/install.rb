@@ -30,7 +30,7 @@ execute "apt-get-update-periodic" do
   end
 end
 
-package "openjdk-7-jdk"
+package "java-1.8.0"
 
 
 # Setup User/Group/Directory structure
