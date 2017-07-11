@@ -79,7 +79,7 @@ end
 template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
   source "mirth.properties.erb"
   mode 0600
-  owner "mirth"
+  owner node[:mirthconnect][:user]
   group "root"
   variables({
     :appdatadir => node[:mirthconnect][:appdatadir],
