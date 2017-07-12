@@ -63,7 +63,7 @@ bash "install-mirth" do
   cwd Chef::Config['file_cache_path']
   code <<-EOL
   tar xzf #{downloaded_archive}
-  mv Mirth\ Connect/ #{node[:mirthconnect][:homedir]}
+  mv "Mirth Connect/" #{node[:mirthconnect][:homedir]}
   EOL
   creates "#{node[:mirthconnect][:homedir]}/mcservice"
 end
@@ -79,8 +79,8 @@ template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
     :dburl => node[:mirthconnect][:dburl],
     :dbuser => node[:mirthconnect][:dbuser],
     :dbpassword => node[:mirthconnect][:dbpassword],
-	:httpport => node[:mirthconnect][:httpport],
-	:httpsport => node[:mirthconnect][:httpsport]
+    :httpport => node[:mirthconnect][:httpport],
+    :httpsport => node[:mirthconnect][:httpsport]
   })
 end
 
