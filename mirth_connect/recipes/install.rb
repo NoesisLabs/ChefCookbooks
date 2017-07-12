@@ -51,7 +51,6 @@ directory node[:mirthconnect][:homedir] do
   mode 00700
 end
 
-
 # Download and setup Mirth
 downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
@@ -66,7 +65,7 @@ bash "install-mirth" do
   tar xzf #{downloaded_archive}
   mv Mirth\ Connect/ #{node[:mirthconnect][:homedir]}
   EOL
-  not_if { File.exists? downloaded_archive }
+  creates "#{node[:mirthconnect][:homedir]}/mcservice"
 end
 
 template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
@@ -96,9 +95,9 @@ systemd_unit 'mirthconnect.service' do
 
   User=node[:mirthconnect][:user]
   Group=node[:mirthconnect][:group]
-  ExecStart=/opt/mirthconnect/mcservice start
-  ExecStop=/opt/mirthconnect/mcservice stop
-  ExecRestart=/opt/mirthconnect/mcservice restart
+  ExecStart=node[:mirthconnect][:homedir]/mcservice start
+  ExecStop=node[:mirthconnect][:homedir]/mcservice stop
+  ExecRestart=node[:mirthconnect][:homedir]/mcservice restart
 
   TimeoutSec=60
 
