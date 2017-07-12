@@ -53,7 +53,7 @@ end
 
 
 # Download and setup Mirth
-downloaded_archive = "Chef::Config['file_cache_path']/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
+downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
   user node[:mirthconnect][:user]
   source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
