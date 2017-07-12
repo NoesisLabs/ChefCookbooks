@@ -44,13 +44,6 @@ user node[:mirthconnect][:user] do
   shell "/bin/bash"
 end
 
-directory node[:mirthconnect][:homedir] do
-  owner node[:mirthconnect][:user]
-  group node[:mirthconnect][:group]
-  recursive true
-  mode 00700
-end
-
 # Download and setup Mirth
 downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
@@ -66,6 +59,13 @@ bash "install-mirth" do
   mv "Mirth Connect/" #{node[:mirthconnect][:homedir]}
   EOL
   creates "#{node[:mirthconnect][:homedir]}/mcservice"
+end
+
+directory node[:mirthconnect][:homedir] do
+  owner node[:mirthconnect][:user]
+  group node[:mirthconnect][:group]
+  recursive true
+  mode 00700
 end
 
 template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
