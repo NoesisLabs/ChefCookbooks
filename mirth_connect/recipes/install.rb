@@ -104,7 +104,7 @@ systemd_unit 'mirthconnect.service' do
   Group=#{node[:mirthconnect][:group]}
   ExecStart=#{node[:mirthconnect][:homedir]}/mcservice start
   ExecStop=#{node[:mirthconnect][:homedir]}/mcservice stop
-  ExecRestart=#{node[:mirthconnect][:homedir]}/mcservice restart
+  ExecReload=#{node[:mirthconnect][:homedir]}/mcservice restart
 
   TimeoutSec=60
 
