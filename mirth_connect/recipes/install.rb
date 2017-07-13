@@ -56,9 +56,9 @@ bash "install-mirth" do
   cwd Chef::Config['file_cache_path']
   code <<-EOL
   tar xzf #{downloaded_archive}
-  mv "Mirth Connect/" #{node[:mirthconnect][:homedir]}
+  mv "Mirth Connect" #{node[:mirthconnect][:homedir]}
   EOL
-  creates "#{node[:mirthconnect][:homedir]}/mcservice"
+  creates "#{node[:mirthconnect][:homedir]}"
 end
 
 directory node[:mirthconnect][:homedir] do
