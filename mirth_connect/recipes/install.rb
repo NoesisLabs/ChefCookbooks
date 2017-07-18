@@ -32,22 +32,10 @@ end
 
 package "default-jdk"
 
-
-# Setup User/Group/Directory structure
-group node[:mirthconnect][:group]
-
-user node[:mirthconnect][:user] do
-  supports :manage_home => true
-  gid node[:mirthconnect][:group]
-  comment "Mirth Connect"
-  home node[:mirthconnect][:homedir]
-  shell "/bin/bash"
-end
-
 # Download and setup Mirth
+
 downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
-  user node[:mirthconnect][:user]
   source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
   not_if { File.exists? downloaded_archive }
 end
@@ -55,31 +43,20 @@ end
 bash "install-mirth" do
   cwd Chef::Config['file_cache_path']
   code <<-EOL
-  tar xzf #{downloaded_archive}
-  mv "Mirth Connect" #{node[:mirthconnect][:homedir]}
+  tar xzf #{downloaded_archive} -C /tmp
+  mv -n "/tmp/Mirth Connect" #{node[:mirthconnect][:installDir]}
   EOL
-  creates "#{node[:mirthconnect][:homedir]}"
-end
-
-directory node[:mirthconnect][:homedir] do
-  owner node[:mirthconnect][:user]
-  group node[:mirthconnect][:group]
-  recursive true
-  mode 00700
+  creates "#{node[:mirthconnect][:installDir]}"
 end
 
 directory node[:mirthconnect][:appdatadir] do
-  owner node[:mirthconnect][:user]
-  group node[:mirthconnect][:group]
   recursive true
   mode 00700
 end
 
-template "#{node[:mirthconnect][:homedir]}/conf/mirth.properties" do
+template "#{node[:mirthconnect][:installDir]}/conf/mirth.properties" do
   source "mirth.properties.erb"
   mode 0600
-  owner node[:mirthconnect][:user]
-  group "root"
   variables({
     :appdatadir => node[:mirthconnect][:appdatadir],
     :dbtype => node[:mirthconnect][:dbtype],
@@ -100,11 +77,9 @@ systemd_unit 'mirthconnect.service' do
   [Service]
   Type=forking
 
-  User=#{node[:mirthconnect][:user]}
-  Group=#{node[:mirthconnect][:group]}
-  ExecStart=#{node[:mirthconnect][:homedir]}/mcservice start
-  ExecStop=#{node[:mirthconnect][:homedir]}/mcservice stop
-  ExecReload=#{node[:mirthconnect][:homedir]}/mcservice restart
+  ExecStart=#{node[:mirthconnect][:installDir]}/mcservice start
+  ExecStop=#{node[:mirthconnect][:installDir]}/mcservice stop
+  ExecReload=#{node[:mirthconnect][:installDir]}/mcservice restart
 
   TimeoutSec=60
 
