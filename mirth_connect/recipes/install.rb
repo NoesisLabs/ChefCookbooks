@@ -42,6 +42,7 @@ user node[:mirthconnect][:user] do
   comment "Mirth Connect"
   home node[:mirthconnect][:homedir]
   shell "/bin/bash"
+  system true
 end
 
 # Download and setup Mirth
