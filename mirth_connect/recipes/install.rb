@@ -37,24 +37,31 @@ package "default-jdk"
 downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
   source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
-  not_if { File.exists? downloaded_archive }
+  action :create_if_missing
 end
 
-bash "install-mirth" do
-  cwd Chef::Config['file_cache_path']
-  code <<-EOL
-  tar xzf #{downloaded_archive} -C /tmp
-  mv -n "/tmp/Mirth Connect" #{node[:mirthconnect][:installdir]}
-  EOL
-  creates "#{node[:mirthconnect][:installdir]}"
+execute "extract mirth" do
+ user "root"
+ group "root"
+ command "tar xvzf #{downloaded_archive} -C /tmp"
+end
+
+execute "install mirth" do
+ user "root"
+ group "root"
+ command "mv -n /tmp/Mirth\ Connect/ #{node[:mirthconnect][:installdir]}"
 end
 
 directory node[:mirthconnect][:appdatadir] do
+  user "root"
+  group "root"
   recursive true
   mode 00700
 end
 
 template "#{node[:mirthconnect][:installdir]}/conf/mirth.properties" do
+  user "root"
+  group "root"
   source "mirth.properties.erb"
   mode 0600
   variables({
@@ -76,7 +83,9 @@ systemd_unit 'mirthconnect.service' do
 
   [Service]
   Type=forking
-
+  
+  User=root
+  Group=root
   ExecStart=#{node[:mirthconnect][:installdir]}/mcservice start
   ExecStop=#{node[:mirthconnect][:installdir]}/mcservice stop
   ExecReload=#{node[:mirthconnect][:installdir]}/mcservice restart
