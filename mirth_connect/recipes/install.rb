@@ -49,7 +49,7 @@ end
 execute "install mirth" do
  user "root"
  group "root"
- command "mv -n /tmp/Mirth\ Connect/ #{node[:mirthconnect][:installdir]}"
+ command "mv -n /tmp/Mirth\\ Connect/ #{node[:mirthconnect][:installdir]}"
 end
 
 directory node[:mirthconnect][:appdatadir] do
