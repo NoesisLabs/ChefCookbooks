@@ -44,9 +44,9 @@ bash "install-mirth" do
   cwd Chef::Config['file_cache_path']
   code <<-EOL
   tar xzf #{downloaded_archive} -C /tmp
-  mv -n "/tmp/Mirth Connect" #{node[:mirthconnect][:installDir]}
+  mv -n "/tmp/Mirth Connect" #{node[:mirthconnect][:installdir]}
   EOL
-  creates "#{node[:mirthconnect][:installDir]}"
+  creates "#{node[:mirthconnect][:installdir]}"
 end
 
 directory node[:mirthconnect][:appdatadir] do
@@ -54,7 +54,7 @@ directory node[:mirthconnect][:appdatadir] do
   mode 00700
 end
 
-template "#{node[:mirthconnect][:installDir]}/conf/mirth.properties" do
+template "#{node[:mirthconnect][:installdir]}/conf/mirth.properties" do
   source "mirth.properties.erb"
   mode 0600
   variables({
@@ -77,9 +77,9 @@ systemd_unit 'mirthconnect.service' do
   [Service]
   Type=forking
 
-  ExecStart=#{node[:mirthconnect][:installDir]}/mcservice start
-  ExecStop=#{node[:mirthconnect][:installDir]}/mcservice stop
-  ExecReload=#{node[:mirthconnect][:installDir]}/mcservice restart
+  ExecStart=#{node[:mirthconnect][:installdir]}/mcservice start
+  ExecStop=#{node[:mirthconnect][:installdir]}/mcservice stop
+  ExecReload=#{node[:mirthconnect][:installdir]}/mcservice restart
 
   TimeoutSec=60
 
