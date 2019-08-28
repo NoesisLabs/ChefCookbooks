@@ -8,7 +8,7 @@ powershell_script 'install eventstore' do
   $choco = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\choco.exe"
   & $choco install nssm --acceptlicense --yes --force
   $nssm = [Environment]::GetEnvironmentVariable("ChocolateyInstall", "Machine") + "\\bin\\nssm.exe"
-  & $nssm install EventStore "#{node[:eventstore][:destination_path]}\\EventStore.ClusterNode.exe" --db ./db --log ./logs
+  & $nssm install EventStore "#{node[:eventstore][:destination_path]}\\EventStore.ClusterNode.exe" --db ./db --log ./logs --reduce-file-cache-pressure TRUE
   EOH
   action :run
   not_if do ::Win32::Service.exists?('EventStore') end
