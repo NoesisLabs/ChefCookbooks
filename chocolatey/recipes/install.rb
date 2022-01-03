@@ -1,5 +1,6 @@
 powershell_script 'Install Chocolatey' do
   code <<-EOH
+  [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
   iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
   $env:CHOCOLATEYINSTALL = [Environment]::GetEnvironmentVariable("CHOCOLATEYINSTALL","Machine")
   EOH
