@@ -36,7 +36,7 @@ package "default-jdk"
 
 downloaded_archive = "#{Chef::Config['file_cache_path']}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
 remote_file downloaded_archive do
-  source "http://downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
+  source "https://s3.us-east-1.amazonaws.com/downloads.mirthcorp.com/connect/#{node[:mirthconnect][:version]}/mirthconnect-#{node[:mirthconnect][:version]}-unix.tar.gz"
   action :create_if_missing
 end
 
